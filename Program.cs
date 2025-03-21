@@ -1,6 +1,5 @@
 using DraganaMakeup.Context;
 using DraganaMakeup.Services;
-using EduSchedule.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

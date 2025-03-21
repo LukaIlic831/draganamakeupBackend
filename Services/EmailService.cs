@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Mail;
 
-namespace EduSchedule.Services;
+namespace DraganaMakeup.Services;
 
 public class EmailService
 {

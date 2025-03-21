@@ -2,7 +2,6 @@ using System.Globalization;
 using DraganaMakeup.Context;
 using DraganaMakeup.Models;
 using DraganaMakeup.Records;
-using EduSchedule.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace DraganaMakeup.Services;
@@ -22,7 +21,7 @@ public class AppointmentService
     {
         try
         {
-            var appointments = await _context.Appointments.Where(a => a.StartTime > DateTime.UtcNow).Select(a => new { ID = a.ID, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, User = a.User! }).ToListAsync();
+            var appointments = await _context.Appointments.Select(a => new { ID = a.ID, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, User = a.User! }).ToListAsync();
             if (appointments == null)
             {
                 return "Termini nisu pronadjeni";
@@ -39,7 +38,7 @@ public class AppointmentService
     {
         try
         {
-            var appointments = await _context.Appointments.Where(a => a.StartTime > DateTime.UtcNow).Select(a => new { ID = a.ID, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, Comment = a.Comment, User = a.User! }).ToListAsync();
+            var appointments = await _context.Appointments.Select(a => new { ID = a.ID, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, Comment = a.Comment, User = a.User! }).ToListAsync();
             if (appointments == null)
             {
                 return "Termini nisu pronadjeni";
@@ -97,9 +96,24 @@ public class AppointmentService
         try
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.SessionID == sessionID);
+            User? newUser = null;
             if (user == null)
             {
                 return "Korisnik nije pronadjen";
+            }
+            if (user.Role == 'A')
+            {
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword(Environment.GetEnvironmentVariable("PASSWORD"));
+                newUser = new User
+                {
+                    Phone = appointmentRecord.Phone!,
+                    Password = hashedPassword,
+                    Username = appointmentRecord.Username!,
+                    CreatedAt = appointmentRecord.startTime,
+                    Role = 'U',
+                    SessionID = ""
+                };
+                await _context.Users.AddAsync(newUser);
             }
             var appointment = await _context.Appointments.FirstOrDefaultAsync(a => a.UserID == user.ID);
             if (appointment != null)
@@ -111,7 +125,7 @@ public class AppointmentService
                 Service = appointmentRecord.Service,
                 Duration = appointmentRecord.Duration,
                 StartTime = appointmentRecord.startTime,
-                User = user,
+                User = newUser != null ? newUser : user,
                 Comment = appointmentRecord.Comment == "" ? null : appointmentRecord.Comment
             };
             await _context.Appointments.AddAsync(newAppointment);
