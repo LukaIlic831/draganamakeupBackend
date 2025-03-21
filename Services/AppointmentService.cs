@@ -130,7 +130,7 @@ public class AppointmentService
             };
             await _context.Appointments.AddAsync(newAppointment);
             await _context.SaveChangesAsync();
-            var body = $"<p>Korisnicko ime: <span>{user.Username}</span></p></br> <p>Broj telefona: <span>{user.Phone}</span></p></br> <p>Datum: <span>{TimeZoneInfo.ConvertTimeFromUtc(newAppointment.StartTime, TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time"))}</span></p></br> <p>Usluga: <span>{newAppointment.Service}</span></p></br>";
+            var body = $"<p>Korisnicko ime: <span>{(newUser != null ? newUser.Username! : user.Username)}</span></p></br> <p>Broj telefona: <span>{(newUser != null ? newUser.Phone! : user.Phone)}</span></p></br> <p>Datum: <span>{TimeZoneInfo.ConvertTimeFromUtc(newAppointment.StartTime, TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time"))}</span></p></br> <p>Usluga: <span>{newAppointment.Service}</span></p></br>";
             await _emailService.SendEmail(body);
             return "Termin zakazan";
         }
