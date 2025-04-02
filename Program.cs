@@ -25,10 +25,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins($"{Environment.GetEnvironmentVariable("ORIGIN")}")
+        policy.WithOrigins($"{Environment.GetEnvironmentVariable("ORIGIN")}", $"{Environment.GetEnvironmentVariable("PREVIEW_ORIGIN")}")
               .AllowCredentials()
               .AllowAnyMethod()
               .AllowAnyHeader();
+              
     });
 });
 
