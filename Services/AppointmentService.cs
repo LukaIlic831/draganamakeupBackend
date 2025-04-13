@@ -21,7 +21,12 @@ public class AppointmentService
     {
         try
         {
-            var appointments = await _context.Appointments.Select(a => new { ID = a.ID, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, User = a.User! }).ToListAsync();
+            var appointments = await _context.Appointments.Select(a => new { ID = a.ID, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, User = new{
+                a.User!.ID,
+                a.User.Phone,
+                a.User.Role,
+                a.User.Username
+            } }).ToListAsync();
             if (appointments == null)
             {
                 return "Termini nisu pronadjeni";
@@ -38,7 +43,12 @@ public class AppointmentService
     {
         try
         {
-            var appointments = await _context.Appointments.Select(a => new { ID = a.ID, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, Comment = a.Comment, User = a.User! }).ToListAsync();
+            var appointments = await _context.Appointments.Select(a => new { ID = a.ID, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, Comment = a.Comment, User = new{
+                a.User!.ID,
+                a.User.Phone,
+                a.User.Role,
+                a.User.Username
+            } }).ToListAsync();
             if (appointments == null)
             {
                 return "Termini nisu pronadjeni";
@@ -53,13 +63,23 @@ public class AppointmentService
 
     public async Task<object> GetAppointmentByUserID(int userID)
     {
-        var user = await _context.Appointments.Where(a => a.UserID == userID && a.StartTime > DateTime.UtcNow).Select(a => new { ID = a.ID, Service = a.Service, StartTime = a.StartTime, User = a.User! }).FirstOrDefaultAsync();
+        var user = await _context.Appointments.Where(a => a.UserID == userID && a.StartTime > DateTime.UtcNow).Select(a => new { ID = a.ID, Service = a.Service, StartTime = a.StartTime, User = new{
+                a.User!.ID,
+                a.User.Phone,
+                a.User.Role,
+                a.User.Username
+            } }).FirstOrDefaultAsync();
         return user!;
     }
 
     public async Task<object> GetAppointmentByID(int appID)
     {
-        var user = await _context.Appointments.Where(a => a.ID == appID).Select(a => new { ID = a.ID, Service = a.Service, StartTime = a.StartTime, User = a.User!, Comment = a.Comment }).FirstOrDefaultAsync();
+        var user = await _context.Appointments.Where(a => a.ID == appID).Select(a => new { ID = a.ID, Service = a.Service, StartTime = a.StartTime, User = new{
+                a.User!.ID,
+                a.User.Phone,
+                a.User.Role,
+                a.User.Username
+            }, Comment = a.Comment }).FirstOrDefaultAsync();
         return user!;
     }
 
