@@ -9,6 +9,7 @@ public class Appointment
     [JsonIgnore]
     public DateTime StartTime { get; set; }
     public int Duration { get; set; }
+    public bool AdminAdded {get; set;} = false;
     public required string Service { get; set; }
     public string? Comment { get; set; }
     [JsonIgnore]

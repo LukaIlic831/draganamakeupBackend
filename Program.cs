@@ -10,6 +10,7 @@ var connectionString = $"Server={Environment.GetEnvironmentVariable("MYSQLHOST")
                        $"User={Environment.GetEnvironmentVariable("MYSQLUSER")};" +
                        $"Password={Environment.GetEnvironmentVariable("MYSQLPASSWORD")};" +
                        "SslMode=Preferred;";
+                       
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString,

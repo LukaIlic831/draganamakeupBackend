@@ -146,6 +146,7 @@ public class AppointmentService
                 Duration = appointmentRecord.Duration,
                 StartTime = appointmentRecord.startTime,
                 User = newUser != null ? newUser : user,
+                AdminAdded = user.Role == 'A',
                 Comment = appointmentRecord.Comment == "" ? null : appointmentRecord.Comment
             };
             await _context.Appointments.AddAsync(newAppointment);
