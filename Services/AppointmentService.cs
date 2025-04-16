@@ -21,7 +21,7 @@ public class AppointmentService
     {
         try
         {
-            var appointments = await _context.Appointments.Select(a => new { ID = a.ID, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, User = new{
+            var appointments = await _context.Appointments.Select(a => new { ID = a.ID, AdminAdded= a.AdminAdded, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, User = new{
                 a.User!.ID,
                 a.User.Phone,
                 a.User.Role,
@@ -63,7 +63,7 @@ public class AppointmentService
 
     public async Task<object> GetAppointmentByUserID(int userID)
     {
-        var user = await _context.Appointments.Where(a => a.UserID == userID && a.StartTime > DateTime.UtcNow).Select(a => new { ID = a.ID, Service = a.Service, StartTime = a.StartTime, User = new{
+        var user = await _context.Appointments.Where(a => a.UserID == userID && a.StartTime > DateTime.UtcNow).Select(a => new { ID = a.ID,AdminAdded= a.AdminAdded, Service = a.Service, StartTime = a.StartTime, User = new{
                 a.User!.ID,
                 a.User.Phone,
                 a.User.Role,
@@ -74,7 +74,7 @@ public class AppointmentService
 
     public async Task<object> GetAppointmentByID(int appID)
     {
-        var user = await _context.Appointments.Where(a => a.ID == appID).Select(a => new { ID = a.ID, Service = a.Service, StartTime = a.StartTime, User = new{
+        var user = await _context.Appointments.Where(a => a.ID == appID).Select(a => new { ID = a.ID, AdminAdded= a.AdminAdded, Service = a.Service, StartTime = a.StartTime, User = new{
                 a.User!.ID,
                 a.User.Phone,
                 a.User.Role,
@@ -88,7 +88,7 @@ public class AppointmentService
         DateTime parsedDate = DateTime.ParseExact(date, "dd MMM yyyy", CultureInfo.InvariantCulture);
         string formattedDate = parsedDate.ToString("dd.MM.yyyy HH:mm:ss");
         DateTime finalDateTime = DateTime.ParseExact(formattedDate, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-        var user = await _context.Appointments.Where(a => a.StartTime.Date == finalDateTime).Select(a => new { ID = a.ID, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, User = a.User!.ID }).ToListAsync();
+        var user = await _context.Appointments.Where(a => a.StartTime.Date == finalDateTime).Select(a => new { ID = a.ID,AdminAdded= a.AdminAdded, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, User = a.User!.ID }).ToListAsync();
         return user!;
     }
 
