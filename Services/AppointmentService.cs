@@ -43,7 +43,7 @@ public class AppointmentService
     {
         try
         {
-            var appointments = await _context.Appointments.Select(a => new { ID = a.ID, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, Comment = a.Comment, User = new{
+            var appointments = await _context.Appointments.Select(a => new { ID = a.ID, AdminAdded= a.AdminAdded, Service = a.Service, Duration = a.Duration, StartTime = a.StartTime, Comment = a.Comment, User = new{
                 a.User!.ID,
                 a.User.Phone,
                 a.User.Role,
